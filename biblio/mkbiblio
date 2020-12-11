@@ -1,0 +1,146 @@
+#! /usr/bin/env python3
+
+# --------------------------------------------------------------------
+import sys, os, re, urllib.request as ul, contextlib as cl
+import tempfile, shutil as sh, subprocess as sp
+import configparser as cp
+import bibtexparser
+
+from bibtexparser.bparser import BibTexParser
+from bibtexparser.bwriter import BibTexWriter
+
+# --------------------------------------------------------------------
+BIBURL  = 'http://dblp.uni-trier.de/pers/tb2'
+LATEXMK = ['latexmk', '-pdf', '-xelatex', '-bibtex', '-interaction=nonstopmode']
+BIBTEX8 = ['bibtex8', '-M', '999999']
+
+# --------------------------------------------------------------------
+class Config(object):
+    def __init__(self, sub = None):
+        key = 'biblio:%s' % sub if sub else 'biblio'
+        ini = cp.ConfigParser()
+        ini.read('config.ini')
+
+        self.key      = ini.get(key, 'key')
+        self.fullname = ini.get(key, 'fullname')
+        self.output   = ini.get(key, 'output')
+        self.pdfurl   = ini.get(key, 'pdfurl')
+        self.articles = ini.get(key, 'articles').split()
+
+# --------------------------------------------------------------------
+TEXCONTENTS = r'''
+\documentclass[10pt,a4paper]{article}
+
+\usepackage[T1]{fontenc}
+\usepackage{microtype}
+
+\PassOptionsToPackage{doi=false,isbn=false,url=false}{biblatex}
+\PassOptionsToPackage{sorting=ydnt}{biblatex}
+
+\usepackage[backend=biber,defernumbers=true]{biblatex}
+\addbibresource{dblp.bib}
+
+\DeclareBibliographyCategory{article}
+\defbibfilter{papers}{type=inproceedings or category=article}
+
+\begin{document}
+
+\section{%(fullname)s}
+
+%(articles)s
+\nocite{*}
+
+\printbibliography[filter=papers]
+
+\end{document}
+'''
+
+# --------------------------------------------------------------------
+@cl.contextmanager
+def tempdir():
+    dirname = tempfile.mkdtemp()
+    try:
+        yield dirname
+    finally:
+        sh.rmtree(dirname)
+
+# --------------------------------------------------------------------
+def _main(config):
+    biburl = '%s/%s.bib' % (BIBURL, config.key)
+
+    with cl.closing(ul.urlopen(biburl)) as stream:
+        contents = stream.read()
+
+    with open('dblp.bib', 'w') as stream:
+        stream.write(contents.decode('utf-8'))
+
+    with tempdir() as dirname:
+        bibname = os.path.join(dirname, 'dblp.bib')
+        texname = os.path.join(dirname, 'dblp.tex')
+        pdfname = os.path.join(dirname, 'dblp.pdf')
+        sauname = os.path.join(dirname, 'sub.aux')
+        sbbname = os.path.join(dirname, 'sub.bib')
+
+        texarticles = \
+            ['\\addtocategory{article}{%s}' % (x,) \
+                for x in config.articles]
+
+        texcontents = TEXCONTENTS % dict(
+            fullname = config.fullname,
+            articles = '\n'.join(texarticles),
+        )
+
+        print(texcontents)
+
+        with open(bibname, 'w') as stream:
+            stream.write(contents.decode('utf-8'))
+        with open(texname, 'w') as stream:
+            stream.write(texcontents)
+
+        sp.call(LATEXMK + [texname], cwd = dirname)
+
+        if os.path.exists(pdfname):
+            sh.copy(pdfname, 'dblp.pdf')
+
+        with open(os.path.join(dirname, 'dblp.aux'), 'r') as stream:
+            aux = stream.readlines()
+
+        def _filter(x):
+            m = re.search(r'^\\abx@aux@number{\d+}{(.*?)}', x)
+            return m.group(1) if m else None
+        aux = [x for x in [_filter(x) for x in aux] if x]
+
+        with open(sauname, 'w') as stream:
+            for aux1 in aux:
+                print('\\citation{%s}' % (aux1,), file=stream)
+            print('\\bibstyle{unsrt}', file=stream)
+            print('\\bibdata{dblp}', file=stream)
+
+        sp.call(['bibexport', '-n', '-o', 'sub.bib', 'sub.aux'], \
+                cwd = dirname)
+
+        if os.path.exists(sbbname):
+            sh.copy(sbbname, '%s.bib' % (config.output,))
+
+        with open('%s.bib' % (config.output,)) as stream:
+            bib = bibtexparser.load(stream)
+
+        if config.pdfurl:
+            for entry in bib.entries:
+                bid = re.sub(r'^DBLP:', '', entry['ID'])
+                bid = re.sub(r'/', '-', bid)
+                pdf = os.path.join \
+                      (os.path.dirname(__file__), 'pdf', bid + '.pdf')
+                lnk = '%s/%s.pdf' % (config.pdfurl, bid)
+
+                if os.path.exists(pdf) and os.path.getsize(pdf) > 0:
+                    entry['url_Link'] = lnk
+
+        writer = BibTexWriter(); writer.indent = '  '
+
+        with open('%s.bib' % (config.output,), 'w') as stream:
+            stream.write(writer.write(bib))
+
+# --------------------------------------------------------------------
+if __name__ == '__main__':
+    _main(Config((sys.argv[1:2] or [None])[0]))

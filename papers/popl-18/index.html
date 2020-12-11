@@ -1,0 +1,227 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Proving Expected Sensitivity of Probabilistic Programs</title>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <link href="//fonts.googleapis.com/css?family=Raleway:400,300,600" rel="stylesheet" type="text/css">
+
+  <link rel="stylesheet" href="../../css/normalize.css">
+  <link rel="stylesheet" href="../../css/style.css">
+
+  <style type="text/css" media="screen">
+  #editor { 
+      position: absolute;
+      top: 0;
+      right: 0;
+      bottom: 0;
+      left: 0;
+  }
+  </style>
+</head>
+<body>
+
+<!-- ------------------------------------------------------------ -->
+<div class="content-wrapper">
+<div class="container">
+<div class="row">
+<div class="twelve columns">
+
+<div id="heading">
+  <h4><a href="#">Proving Expected Sensitivity of Probabilistic Programs</a></h4>
+</div>
+
+<ul class="authors">
+  <li>Gilles Barthe &ndash; <em>IMDEA Software Institute, Spain</em></li>
+  <li>Thomas Espitau &ndash; <em>Sorbonne Universités, UPMC Paris 6, France</em></li>
+  <li>Benjamin Grégoire &ndash; <em>Inria Sophia Antipolis Méditerranée, France</em></li>
+  <li>Justin Hsu &ndash; <em>University of Pennsylvania, USA</em></li>
+  <li>Pierre-Yves Strub &ndash; <em>École Polytechnique, France</em></li>
+</ul>
+
+</div>
+</div>
+</div>
+</div>
+
+<!-- ------------------------------------------------------------ -->
+<div class="content-wrapper alt nohead">
+<div class="container">
+<div class="row">
+<div class="twelve columns">
+
+<p>This page provides the installation instructions for
+the tools presented in the paper <strong>Proving Expected Sensitivity
+of Probabilistic Programs</strong>, along with the companion
+examples.</p>
+
+<p><strong>Update (17/10)</strong>: we added the full formalization
+of the Glauber example and updated the binary images accordingly.</p>
+
+<p><strong>Update (18/10)</strong>: the binary images uploaded on
+17/10 where bogus. We just re-uploaded new binary images.</p>
+
+</div>
+</div>
+</div>
+</div>
+
+<!-- ------------------------------------------------------------ -->
+<div class="content-wrapper">
+<div class="container">
+<div class="row">
+<div class="twelve columns">
+
+<h5>Installing the EpRHL proof assistant</h5>
+
+<p>Our tool is based on
+the <a href="https://www.easycrypt.info/">EasyCrypt</a> proof
+assistant. The source code is publicly available on the
+<a href="https://github.com/EasyCrypt/easycrypt">project GitHub
+page</a> under the
+<a href="https://github.com/EasyCrypt/easycrypt/tree/deploy-momemtum"
+  >deploy-momemtum branch</a>. The source file comes with
+a <a href="https://github.com/EasyCrypt/easycrypt/blob/deploy-momemtum/README.md"
+  >README</a> file that gives detailed installation instructions.
+However, we encourage you using one of the binary images that can
+be downloaded below.
+</p>
+
+</div>
+</div>
+</div>
+</div>
+
+<div class="content-wrapper alt">
+<div class="container">
+<div class="row">
+<div class="twelve columns">
+
+<h5>Binary images</h5>
+
+We provide binary images for GNU/Linux &amp; MacOS-X systems, along
+with a VirtualBox disk image:
+
+<ul>
+  <li>Under GNU/Linux, you can download an AppImage binary image. This
+  image comes with EasyCrypt/EPRHL pre-installed, along with SMT
+  solvers
+  (<a href="https://github.com/Z3Prover/z3">Z3</a>,
+   <a href="http://alt-ergo.lri.fr/">Alt-Ergo</a>,
+   <a href="www.eprover.org/">E-Prover</a>) and a GUI
+  (Emacs/<a href="https://proofgeneral.github.io/">ProofGeneral</a>). Once
+  downloaded, make the image executable (using your file explorer
+  or <tt>chmod</tt>) and run it &ndash; the embedded Emacs should then
+  appear. From there, you can simply open the examples and browse them
+  using the ProofGeneral menu-bar.</li>
+  <li>Under MacOS-X, we provide a native application that comes with
+  EasyCrypt/EPRHL pre-installed, along with SMT solvers
+  (<a href="https://github.com/Z3Prover/z3">Z3</a>,
+   <a href="http://alt-ergo.lri.fr/">Alt-Ergo</a>,
+   <a href="www.eprover.org/">E-Prover</a>) and a GUI
+  (Emacs/<a href="https://proofgeneral.github.io/">ProofGeneral</a>).
+  Once downloaded the DMG image, open it and copy the application to
+  whatever location suits you. Running the application will start the
+  Emacs-based GUI --- the application is not code-signed, you may have
+  to right-click and select <em>Open</em> from the contextual
+  menu. From there, you can simply open the examples and browse them
+  using the ProofGeneral menu-bar.</li>
+  <li>We also provide a VirtualBox appliance that contains a
+  pre-installed GNU/Linux system along with the aforementioned
+  GNU/Linux binary image.  Simply download the
+  appliance, <a href="https://www.virtualbox.org/manual/UserManual.html#ovf">import
+  it</a> in your VirtualBox instance and run the system. Once booted,
+  you will find an <em>EasyCrypt</em> icon on the
+  desktop. Double-click on it. Emacs should then appear. You can then
+  simply open the examples and browse them using the
+  Emacs/ProofGeneral menu-bar.</li> </li>
+</ul>
+
+<h6>Downloads</h6>
+
+<ul>
+  <li><a href="https://www.easycrypt.info/momemtum/Momemtum.AppImage">GNU/Linux binary image</a></li>
+  <li><a href="https://www.easycrypt.info/momemtum/Momemtum.dmg">MacOS-X application</a></li>
+  <li><a href="https://www.easycrypt.info/momemtum/MomemtumBox.ova">VirtualBox appliance</a></li>
+</ul>
+
+</div>
+</div>
+</div>
+</div>
+
+<div class="content-wrapper">
+<div class="container">
+<div class="row">
+<div class="twelve columns">
+
+<h5>Examples</h5>
+
+<p>We provide an <a href="examples.zip">archive</a> with
+the <em>commented</em> companion examples of the paper. You can browse
+these examples using the GUI of the aforementioned binary images.  The
+GUI is based on Emacs/ProofGeneral (an Emacs mode for interactive
+proof assistants). Once the <tt>.ec</tt> file opened into Emacs, the
+ProofGeneral mode should be started automatically. From there, you can
+use the top toolbar to process the file, either step by step (using
+the left/right arrows) or entirely (using the down arrow). In the
+step-by-step mode, the Emacs window is split into 3 panes: i) the left
+pane shows the proof script (the hightlighted part is the proof script
+that has already been processed), ii) the top-right pane shows the
+current proof goal (if in proof-mode) and iii) the top-bottom pane
+shows the proof assistant message.<p>
+
+<p>When you process the whole buffer at once, the only output you get
+is that the final lemma has been checked. For having the details, you
+have to go step by step. E.g., you can open the graph.ec file, put
+your cursor after the statement <tt>Lemma Glauber...</tt> (around line
+280) and hit <tt>CTRL+Enter</tt>. EPRHL will process the buffer up to
+that point and display what remains to be proved. Then, you can use
+the left/right arrows to go forward/backward in the proof. The EPRHL
+proofs are displayed as follows:</p>
+
+<pre><code>
+&amp;1 (left ) : M.f
+&amp;2 (right) : M.f
+
+(d-left ) : cdiffer w{1} w{2}%r
+(d-right) : cdiffer w{1} w{2}%r
+(d-tx   ) : dist
+
+pre = true
+
+i &lt;- 0                            (1----)  i &lt;- 0                          
+while (i &lt; T0) {                  (2----)  while (i &lt; T0) {                
+  (v, c) &lt;@ PS0.S.sample2()       (2.1--)    (v, c) &lt;@ PS0.S.sample2()     
+  if (valid_cond w v c) {         (2.2--)    if (valid_cond w v c) {       
+    w &lt;-                          (2.2.1)      w &lt;-                        
+      fun (x : vertex) =&gt;         (     )        fun (x : vertex) =&gt;       
+        if x = v then c else w x  (     )          if x = v then c else w x
+  }                               (2.2--)    }                             
+  i &lt;- i + 1                      (2.3--)    i &lt;- i + 1                    
+}                                 (2----)  }                               
+
+post = true
+</code></pre>
+
+<p>Here, <tt>d-left</tt> / <tt>d-right</tt> are resp. the pre/post
+distances, <tt>d-tx</tt> is the affine function of the judgement,
+<tt>pre/post</tt> are the pre/post conditions in memories &1/&2 and
+the programs are between the pre/post.</p>
+
+<p>Note that EPRHL being a mode for EasyCrypt, most of the commands
+are commented in the
+<a href="https://www.easycrypt.info/documentation/refman.pdf">EasyCrypt
+documentation</a>.</p>
+
+</div>
+</div>
+</div>
+</div>
+
+<hr />
+
+</body>
+</html>
